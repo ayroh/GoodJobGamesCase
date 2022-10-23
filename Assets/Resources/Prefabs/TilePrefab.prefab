@@ -127,4 +127,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b8c32d1c4489449955bbf7e3cf5dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rend: {fileID: 3463436970586123890}
   tileColor: 0
