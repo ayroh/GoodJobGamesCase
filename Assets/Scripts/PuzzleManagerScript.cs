@@ -7,8 +7,7 @@ using System.Linq;
 public class PuzzleManagerScript : MonoBehaviour {
     public static PuzzleManagerScript instance;
 
-    public enum TileColor { Yellow, Blue, Green, Pink, Purple, Red };
-
+    
     public class TileCoordinate{
         public TileCoordinate(int X, int Y) {
             x = X;
@@ -55,11 +54,12 @@ public class PuzzleManagerScript : MonoBehaviour {
             Destroy(this);
     }
 
-    void Start()
-    {
+    private void OnValidate() {
         if (aCondition > bCondition || aCondition > cCondition || bCondition > cCondition)
             Debug.LogError("A-B-C conditions are not correct");
-
+    }
+    void Start()
+    {
         tileDestroyTemp = new List<TileCoordinate>();
         adjacentTiles = new List<TileCoordinate>();
         tilePrefab = Resources.Load<GameObject>("Prefabs/TilePrefab");
@@ -74,7 +74,7 @@ public class PuzzleManagerScript : MonoBehaviour {
     {
         if(Input.GetMouseButtonDown(0) && Physics.RaycastNonAlloc(mainCam.ScreenPointToRay(Input.mousePosition), tileHit, 100f, tileLayer) == 1)
         {
-            tileDestroyTemp = new List<TileCoordinate>();
+            tileDestroyTemp.Clear();
             CheckBlastable();
             if (tileDestroyTemp.Count >= minimumBlastableNumber)
                 DestroyAddTiles();
@@ -139,13 +139,13 @@ public class PuzzleManagerScript : MonoBehaviour {
                 adjacentTiles.Add(new TileCoordinate(i, j));
                 CountAdjacents(i, j);
                 if (adjacentTiles.Count <= aCondition)
-                    SetAdjacentImages(0);
+                    SetAdjacentImages(Icon._Default);
                 else if(adjacentTiles.Count > aCondition && adjacentTiles.Count <= bCondition)
-                    SetAdjacentImages(1);
+                    SetAdjacentImages(Icon._A);
                 else if (adjacentTiles.Count > bCondition && adjacentTiles.Count <= cCondition)
-                    SetAdjacentImages(2);
+                    SetAdjacentImages(Icon._B);
                 else if (adjacentTiles.Count > cCondition)
-                    SetAdjacentImages(3);
+                    SetAdjacentImages(Icon._C);
             }
         }
         if (isDeadlock)
@@ -218,9 +218,9 @@ public class PuzzleManagerScript : MonoBehaviour {
     }
 
 
-    private void SetAdjacentImages(int Icon) {
+    private void SetAdjacentImages(Icon iconType) {
         for (int i = 0;i < adjacentTiles.Count;++i)
-            tiles[adjacentTiles[i].x][adjacentTiles[i].y].SetImage(Icon);
+            tiles[adjacentTiles[i].x][adjacentTiles[i].y].SetImage(iconType);
     }
 
     private void CountAdjacents(int x = -1, int y = -1) {
