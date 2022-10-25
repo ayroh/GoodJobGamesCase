@@ -8,7 +8,6 @@ public class TileScript : MonoBehaviour
     public TileColor tileColor;
 
 
-
     public void SetRandomColor() {
         tileColor = (TileColor)Random.Range(0, PuzzleManagerScript.instance.GetColorNumber());
         rend.material.SetTexture("_MainTex", Resources.Load<Texture2D>("Images/" + tileColor + "_Default"));
